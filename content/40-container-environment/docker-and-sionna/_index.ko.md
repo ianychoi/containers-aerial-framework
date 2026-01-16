@@ -20,8 +20,8 @@ Sionna를 로컬에 직접 설치하지 말고, Dockerfile로 환경을 정의�
 
 ## 📋 1단계: 파일 준비 (5분)
 
-- Link1: ![Dockerfile](/static/samples/docker-sionna/Dockerfile)
-- Link2: ![simple_awgn.py](/static/samples/docker-sionna/simple_awgn.py)
+- Link1: ![Dockerfile](/samples/docker-sionna/Dockerfile)
+- Link2: ![simple_awgn.py](/samples/docker-sionna/simple_awgn.py)
 
 ```bash
 mkdir /workshop/docker-sionna

@@ -56,28 +56,34 @@ Through this workshop, you'll see how containers and EKS provide an excellent fo
 
 <div class="tabs"><div class="tab-buttons"><button class="tab-button" onclick="openTab(event, 'Scalability')">Scalability</button><button class="tab-button" onclick="openTab(event, 'Flexibility')">Flexibility</button><button class="tab-button" onclick="openTab(event, 'Operations')">Operations</button></div><div class="tab-content">
 
-{{< tab "Scalability" }}
+<div id="Scalability" class="tab-pane">
+
 **Dynamic Infrastructure**
 - Auto-scaling based on research workload demand
 - AWS specialized hardware support (high-performance computing, dedicated instances)
 - Distributed simulation capabilities
 - Multi-workload deployment patterns
+
 </div>
 
-{{< tab "Flexibility" }}
+<div id="Flexibility" class="tab-pane">
+
 **Choice and Control**
 - Self-hosted simulation tools
 - Managed cloud services integration
 - Hybrid deployment patterns
 - Custom optimization strategies
+
 </div>
 
-{{< tab "Operations" }}
+<div id="Operations" class="tab-pane">
+
 **Operational Excellence**
 - Comprehensive observability through CloudWatch
 - Automated lifecycle management with Helm
 - Cost optimization and tracking
 - Security best practices
+
 </div>
 
 </div></div>

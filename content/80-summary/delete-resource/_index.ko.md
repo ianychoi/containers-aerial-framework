@@ -13,7 +13,7 @@ weight: 81
 
 Amazon EKS 콘솔에서 클러스터를 삭제해 주세요:
 
-![Delete Cluster](/static/delete-cluster.png)
+![Delete Cluster](/delete-cluster.png)
 
 ## 명령어를 통한 리소스 정리
 

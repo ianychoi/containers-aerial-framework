@@ -13,7 +13,7 @@ After completing the workshop, clean up created resources to prevent cost incurr
 
 Delete the cluster from the Amazon EKS console:
 
-![Delete Cluster](/static/delete-cluster.png)
+![Delete Cluster](/delete-cluster.png)
 
 ## Resource Cleanup via Command Line
 

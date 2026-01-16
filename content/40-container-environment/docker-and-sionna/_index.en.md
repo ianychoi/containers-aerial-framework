@@ -20,8 +20,8 @@ Instead of installing Sionna locally, let's define the environment with Dockerfi
 
 ## 📋 Step 1: File Preparation (5 minutes)
 
-- Link1: ![Dockerfile](/static/samples/docker-sionna/Dockerfile)
-- Link2: ![simple_awgn.py](/static/samples/docker-sionna/simple_awgn.py)
+- Link1: ![Dockerfile](/samples/docker-sionna/Dockerfile)
+- Link2: ![simple_awgn.py](/samples/docker-sionna/simple_awgn.py)
 
 ```bash
 mkdir /workshop/docker-sionna

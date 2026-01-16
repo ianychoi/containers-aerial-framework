@@ -56,28 +56,34 @@ graph LR
 
 <div class="tabs"><div class="tab-buttons"><button class="tab-button" onclick="openTab(event, '확장성')">확장성</button><button class="tab-button" onclick="openTab(event, '유연성')">유연성</button><button class="tab-button" onclick="openTab(event, '운영')">운영</button></div><div class="tab-content">
 
-{{< tab "확장성" }}
+<div id="확장성" class="tab-pane">
+
 **동적 인프라**
 - 연구 워크로드 수요에 따른 자동 스케일링
 - AWS 전용 하드웨어 지원 (고성능 컴퓨팅, 전용 인스턴스)
 - 분산 시뮬레이션 기능
 - 멀티 워크로드 배포 패턴
+
 </div>
 
-{{< tab "유연성" }}
+<div id="유연성" class="tab-pane">
+
 **선택과 제어**
 - 자체 호스팅 시뮬레이션 도구
 - 관리형 클라우드 서비스 통합
 - 하이브리드 배포 패턴
 - 맞춤형 최적화 전략
+
 </div>
 
-{{< tab "운영" }}
+<div id="운영" class="tab-pane">
+
 **운영 우수성**
 - CloudWatch를 통한 포괄적 관찰성
 - Helm을 통한 자동화된 라이프사이클 관리
 - 비용 최적화 및 추적
 - 보안 모범 사례
+
 </div>
 
 </div></div>
