@@ -54,7 +54,7 @@ graph LR
 
 Through this workshop, you'll see how containers and EKS provide an excellent foundation for telecommunications research platforms:
 
-{{< tabs "Scalability" "Flexibility" "Operations" >}}
+<div class="tabs"><div class="tab-buttons"><button class="tab-button" onclick="openTab(event, 'Scalability')">Scalability</button><button class="tab-button" onclick="openTab(event, 'Flexibility')">Flexibility</button><button class="tab-button" onclick="openTab(event, 'Operations')">Operations</button></div><div class="tab-content">
 
 {{< tab "Scalability" }}
 **Dynamic Infrastructure**
@@ -62,7 +62,7 @@ Through this workshop, you'll see how containers and EKS provide an excellent fo
 - AWS specialized hardware support (high-performance computing, dedicated instances)
 - Distributed simulation capabilities
 - Multi-workload deployment patterns
-{{< /tab >}}
+</div>
 
 {{< tab "Flexibility" }}
 **Choice and Control**
@@ -70,7 +70,7 @@ Through this workshop, you'll see how containers and EKS provide an excellent fo
 - Managed cloud services integration
 - Hybrid deployment patterns
 - Custom optimization strategies
-{{< /tab >}}
+</div>
 
 {{< tab "Operations" }}
 **Operational Excellence**
@@ -78,9 +78,9 @@ Through this workshop, you'll see how containers and EKS provide an excellent fo
 - Automated lifecycle management with Helm
 - Cost optimization and tracking
 - Security best practices
-{{< /tab >}}
+</div>
 
-{{< /tabs >}}
+</div></div>
 
 ## 🏗️ Built on AWS Container Best Practices
 
