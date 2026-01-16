@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Version Management Using Git  |  Containers Aerial Framework Workshop</title>
+    <meta name="description" content="Learn to build reproducible telecommunications simulation research environments using Docker containers and Git version management with NVIDIA Sionna and Aerial Framework">
+    
+    <link rel="icon" href="/aws-logo.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+</head>
+<body>
+    
+    <header>
+        <nav>
+            
+            <ul>
+                
+                <li><a href="/en/">English</a></li>
+                
+                <li><a href="/ko/">한국어</a></li>
+                
+            </ul>
+            
+        </nav>
+    </header>
+    
+    
+    <main>
+        
+<article>
+    <header>
+        <h1>Version Management Using Git</h1>
+        
+    </header>
+    
+    <div class="content">
+        <h1 id="version-management-using-git">Version Management Using Git</h1>
+<p><strong>AI-DLC Based Experiment Code Management</strong></p>
+<p>Having built container-based experiment environments, systematic version management is now essential. In this module, you&rsquo;ll learn how to build an experiment version management system using Git based on AI-DLC (Development Life Cycle) concepts.</p>
+<h2 id="-learning-objectives">🎯 Learning Objectives</h2>
+<p>After completing this module, you will be able to:</p>
+<ul>
+<li>Understand AI-DLC (Development Life Cycle) concepts and experiment reproducibility importance</li>
+<li>Initialize Git repositories and utilize basic commands</li>
+<li>Implement efficient version management through .gitignore files</li>
+</ul>
+<h2 id="-ai-dlc-concepts-and-experiment-reproducibility">🔄 AI-DLC Concepts and Experiment Reproducibility</h2>
+<h3 id="what-is-ai-dlc-development-life-cycle">What is AI-DLC (Development Life Cycle)?</h3>
+<p>AI-DLC is a methodology for managing the entire lifecycle of data, code, and experiment results in AI/ML research:</p>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph LR
+    subgraph &#34;AI-DLC Cycle&#34;
+        A[Data&lt;br/&gt;Data] --&gt; B[Code&lt;br/&gt;Code]
+        B --&gt; C[Experiment&lt;br/&gt;Experiment]
+        C --&gt; D[Results&lt;br/&gt;Results]
+        D --&gt; E[Analysis&lt;br/&gt;Analysis]
+        E --&gt; A
+    end
+    
+    subgraph &#34;Version Control&#34;
+        F[Git Repository&lt;br/&gt;Git Repository]
+        G[Docker Images&lt;br/&gt;Docker Images]
+        H[Experiment Logs&lt;br/&gt;Experiment Logs]
+    end
+    
+    A -.-&gt; F
+    B -.-&gt; F
+    C -.-&gt; G
+    D -.-&gt; H
+    E -.-&gt; F
+    
+    style A fill:#e3f2fd
+    style B fill:#f3e5f5
+    style C fill:#fff3e0
+    style D fill:#e8f5e8
+    style E fill:#fce4ec
+</code></pre><h3 id="importance-of-experiment-reproducibility">Importance of Experiment Reproducibility</h3>
+<p>Why experiment reproducibility is crucial in communication research:</p>
+<ul>
+<li><strong>Research Validation</strong>: Ensuring identical results under identical conditions</li>
+<li><strong>Collaboration Efficiency</strong>: Sharing experiment environments among team members</li>
+<li><strong>Incremental Improvement</strong>: Building upon previous experiments</li>
+<li><strong>Paper Writing</strong>: Establishing credibility with reproducible results</li>
+</ul>
+<h2 id="-git-repository-initialization">🚀 Git Repository Initialization</h2>
+<h3 id="repository-creation-and-initial-setup">Repository Creation and Initial Setup</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Create project directory</span>
+</span></span><span class="line"><span class="cl">mkdir sionna-experiments
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> sionna-experiments
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Initialize Git repository</span>
+</span></span><span class="line"><span class="cl">git init
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Set default branch to main</span>
+</span></span><span class="line"><span class="cl">git branch -M main
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Set user information (if not configured globally)</span>
+</span></span><span class="line"><span class="cl">git config user.name <span class="s2">&#34;Your Name&#34;</span>
+</span></span><span class="line"><span class="cl">git config user.email <span class="s2">&#34;your.email@example.com&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="create-basic-files">Create Basic Files</h3>
+<p><strong>README.md file:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl"><span class="gh"># Sionna Experiments
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Communication system simulation experiment project using NVIDIA Sionna
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">## Project Overview
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">This project provides a Sionna-based experiment environment for 5G/6G communication system research.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">## Environment Setup
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">### Using Docker
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">```bash
+</span></span><span class="line"><span class="cl">docker-compose up -d
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="local-environment">Local Environment</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pip install -r requirements.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="running-experiments">Running Experiments</h2>
+<h3 id="basic-experiment">Basic Experiment</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python experiments/baseline/awgn_simulation.py
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="project-structure">Project Structure</h2>
+<ul>
+<li><code>src/</code>: Source code</li>
+<li><code>experiments/</code>: Experiment scripts</li>
+<li><code>notebooks/</code>: Jupyter notebooks</li>
+<li><code>results/</code>: Experiment results</li>
+<li><code>data/</code>: Data files</li>
+</ul>
+<h2 id="contributing">Contributing</h2>
+<ol>
+<li>Fork the repository</li>
+<li>Create a feature branch</li>
+<li>Make your changes</li>
+<li>Submit a pull request</li>
+</ol>
+<pre tabindex="0"><code>
+## 📝 .gitignore File Configuration
+
+It&#39;s recommended to exclude security-sensitive files, large files, and other files that shouldn&#39;t be version controlled.
+
+### Efficient .gitignore Setup (Example)
+
+```gitignore
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# IPython
+profile_default/
+ipython_config.py
+
+# Environment variables
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Data files (large files)
+data/raw/*.csv
+data/raw/*.h5
+data/raw/*.hdf5
+data/processed/*.pkl
+data/processed/*.pickle
+
+# Results (selectively add)
+results/models/*.h5
+results/models/*.pb
+results/logs/train/
+results/logs/validation/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Docker
+.dockerignore
+
+# Conda
+.conda/
+</code></pre><h2 id="-basic-git-workflow">🔧 Basic Git Workflow</h2>
+<h3 id="common-git-commands">Common Git Commands</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Check file status</span>
+</span></span><span class="line"><span class="cl">git status
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Stage changes</span>
+</span></span><span class="line"><span class="cl">git add .
+</span></span><span class="line"><span class="cl">git add src/models/new_model.py
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Create commit</span>
+</span></span><span class="line"><span class="cl">git commit -m <span class="s2">&#34;Add new MIMO channel model implementation&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Add remote repository</span>
+</span></span><span class="line"><span class="cl">git remote add origin https://github.com/username/sionna-experiments.git
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Push changes</span>
+</span></span><span class="line"><span class="cl">git push -u origin main
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Pull changes</span>
+</span></span><span class="line"><span class="cl">git pull origin main
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Create and switch branch</span>
+</span></span><span class="line"><span class="cl">git checkout -b feature/new-experiment
+</span></span><span class="line"><span class="cl">git switch feature/new-experiment
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Merge branch</span>
+</span></span><span class="line"><span class="cl">git checkout main
+</span></span><span class="line"><span class="cl">git merge feature/new-experiment
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check log</span>
+</span></span><span class="line"><span class="cl">git log --oneline --graph
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="experiment-focused-commit-strategy">Experiment-Focused Commit Strategy</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Commit experiment configuration</span>
+</span></span><span class="line"><span class="cl">git add experiments/mimo_systems/config.py
+</span></span><span class="line"><span class="cl">git commit -m <span class="s2">&#34;Configure MIMO system parameters for 64x64 antenna array&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Commit experiment execution script</span>
+</span></span><span class="line"><span class="cl">git add experiments/mimo_systems/run_simulation.py
+</span></span><span class="line"><span class="cl">git commit -m <span class="s2">&#34;Implement MIMO simulation with Sionna channel models&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Commit results analysis</span>
+</span></span><span class="line"><span class="cl">git add notebooks/results/mimo_analysis.ipynb
+</span></span><span class="line"><span class="cl">git commit -m <span class="s2">&#34;Analyze MIMO performance results and generate plots&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Commit documentation update</span>
+</span></span><span class="line"><span class="cl">git add README.md docs/mimo_experiments.md
+</span></span><span class="line"><span class="cl">git commit -m <span class="s2">&#34;Update documentation for MIMO experiments&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="-branching-strategy">🌿 Branching Strategy</h2>
+<h3 id="experiment-focused-branch-structure">Experiment-Focused Branch Structure</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Main branch</span>
+</span></span><span class="line"><span class="cl">main                    <span class="c1"># Stable experiment environment</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Feature branches</span>
+</span></span><span class="line"><span class="cl">feature/channel-models  <span class="c1"># New channel model implementation</span>
+</span></span><span class="line"><span class="cl">feature/mimo-systems   <span class="c1"># MIMO system experiments</span>
+</span></span><span class="line"><span class="cl">feature/optimization   <span class="c1"># Optimization algorithms</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Experiment branches</span>
+</span></span><span class="line"><span class="cl">experiment/baseline-v1  <span class="c1"># Baseline experiment version 1</span>
+</span></span><span class="line"><span class="cl">experiment/mimo-64x64  <span class="c1"># 64x64 MIMO experiment</span>
+</span></span><span class="line"><span class="cl">experiment/ldpc-codes  <span class="c1"># LDPC code experiment</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Release branches</span>
+</span></span><span class="line"><span class="cl">release/v1.0           <span class="c1"># First release</span>
+</span></span><span class="line"><span class="cl">release/v1.1           <span class="c1"># Bug fix release</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="branch-creation-and-management">Branch Creation and Management</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Create new experiment branch</span>
+</span></span><span class="line"><span class="cl">git checkout -b experiment/mimo-performance
+</span></span><span class="line"><span class="cl">git push -u origin experiment/mimo-performance
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Merge to main branch after experiment completion</span>
+</span></span><span class="line"><span class="cl">git checkout main
+</span></span><span class="line"><span class="cl">git merge experiment/mimo-performance
+</span></span><span class="line"><span class="cl">git push origin main
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Clean up experiment branch</span>
+</span></span><span class="line"><span class="cl">git branch -d experiment/mimo-performance
+</span></span><span class="line"><span class="cl">git push origin --delete experiment/mimo-performance
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="-summary">📝 Summary</h2>
+<p>What you learned in this module:</p>
+<p>✅ <strong>Understanding AI-DLC Concepts</strong></p>
+<ul>
+<li>Data-Code-Lifecycle management methodology</li>
+<li>Importance and implementation of experiment reproducibility</li>
+</ul>
+<p>✅ <strong>Git Version Management</strong></p>
+<ul>
+<li>Repository initialization and basic commands</li>
+<li>Experiment-focused commit strategies</li>
+</ul>
+<p>✅ <strong>Efficient File Management</strong></p>
+<ul>
+<li>Selective version management through .gitignore</li>
+<li>Excluding security-sensitive files, large files, and temporary files</li>
+</ul>
+<h2 id="-next-steps">🚀 Next Steps</h2>
+<p>In the next module, you&rsquo;ll learn integrated experiment environments using Sionna as an example with Git and team-based experiment sharing workflows. We&rsquo;ll build collaboration-centered workflows that ensure experiment change tracking and reproducibility.</p>
+<hr>
+<p><strong><a href="/en/60-integrated-workflow/">Continue to Integrated Workflow →</a></strong></p>
+
+    </div>
+    
+    
+    <nav class="pagination">
+        
+        <a href="//localhost:1313/en/60-integrated-workflow/" class="prev">← Integrated Workflow Practice</a>
+        
+        
+        <a href="//localhost:1313/en/40-container-environment/" class="next">Container-based Isolated Experiment Environment →</a>
+        
+    </nav>
+    
+</article>
+
+    </main>
+    
+    
+    <footer>
+        <p>&copy; 2026 Containers Aerial Framework Workshop</p>
+    </footer>
+    
+</body>
+</html>

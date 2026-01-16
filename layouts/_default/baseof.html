@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ block "title" . }}{{ .Title }} {{ .Site.Params.titleSeparator }} {{ .Site.Title }}{{ end }}</title>
+    <meta name="description" content="{{ .Site.Params.description }}">
+    {{ if .Site.Params.logo }}
+    <link rel="icon" href="{{ .Site.Params.logo }}">
+    {{ end }}
+    <link rel="stylesheet" href="/css/style.css">
+    {{ block "head" . }}{{ end }}
+</head>
+<body>
+    {{ block "header" . }}
+    <header>
+        <nav>
+            {{ if hugo.IsMultilingual }}
+            <ul>
+                {{ range .Site.Languages }}
+                <li><a href="/{{ .Lang }}/">{{ .LanguageName }}</a></li>
+                {{ end }}
+            </ul>
+            {{ end }}
+        </nav>
+    </header>
+    {{ end }}
+    
+    <main>
+        {{ block "main" . }}{{ end }}
+    </main>
+    
+    {{ block "footer" . }}
+    <footer>
+        <p>&copy; {{ now.Year }} {{ .Site.Title }}</p>
+    </footer>
+    {{ end }}
+</body>
+</html>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Containers Aerial Framework Workshop with Sionna for Telco Research and Simulation on Containers Aerial Framework Workshop</title>
+    <link>//localhost:1313/en/</link>
+    <description>Recent content in Containers Aerial Framework Workshop with Sionna for Telco Research and Simulation on Containers Aerial Framework Workshop</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="//localhost:1313/en/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introduction</title>
+      <link>//localhost:1313/en/20-introduction/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/en/20-introduction/</guid>
+      <description>&lt;p&gt;Welcome to the AWS Containers Workshop for Telco Research and Simulation Environment Management!&lt;/p&gt;&#xA;&lt;p&gt;This workshop teaches you how to build reproducible telecommunications simulation research environments using Docker containers and Git version management with NVIDIA Sionna.&lt;/p&gt;&#xA;&lt;h2 id=&#34;-learning-objectives&#34;&gt;🎯 Learning Objectives&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Understand reproducible experimental environments using Docker container technology&lt;/li&gt;&#xA;&lt;li&gt;Containerize NVIDIA Sionna-based telecommunications simulation environments&lt;/li&gt;&#xA;&lt;li&gt;Utilize Git version management systems based on AI-DLC (Development Life Cycle) concepts&lt;/li&gt;&#xA;&lt;li&gt;Implement integrated experimental environments and collaborative workflows&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;-getting-started&#34;&gt;🚀 Getting Started&lt;/h2&gt;&#xA;&lt;p&gt;To begin the workshop, proceed to the &lt;a href=&#34;//localhost:1313/20-introduction/getting-started/&#34;&gt;Getting Started&lt;/a&gt; section to review the detailed workshop structure and environment preparation methods.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Docker Basics</title>
+      <link>//localhost:1313/en/30-docker-basics/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/en/30-docker-basics/</guid>
+      <description>&lt;h1 id=&#34;docker-basics&#34;&gt;Docker Basics&lt;/h1&gt;&#xA;&lt;p&gt;Efficiently utilizing cloud resources has become essential for various environments using IT infrastructure, including telecommunications simulation research. In this module, you&amp;rsquo;ll learn how to use Docker container technology.&lt;/p&gt;&#xA;&lt;h2 id=&#34;-learning-objectives&#34;&gt;🎯 Learning Objectives&lt;/h2&gt;&#xA;&lt;p&gt;After completing this module, you will be able to:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Understand the differences between containers and virtual machines and Docker architecture&lt;/li&gt;&#xA;&lt;li&gt;Execute and manage containers using basic Docker commands&lt;/li&gt;&#xA;&lt;li&gt;Build custom images by writing Dockerfiles&lt;/li&gt;&#xA;&lt;li&gt;Manage data persistence using volumes&lt;/li&gt;&#xA;&lt;li&gt;Optimize images through multi-stage builds&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;-module-structure&#34;&gt;📚 Module Structure&lt;/h2&gt;&#xA;&lt;p&gt;This Docker Basics module is organized as follows:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Container-based Isolated Experiment Environment</title>
+      <link>//localhost:1313/en/40-container-environment/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/en/40-container-environment/</guid>
+      <description>&lt;h1 id=&#34;container-based-isolated-experiment-environment&#34;&gt;Container-based Isolated Experiment Environment&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;Building Reproducible Research Environments&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;Having learned the basic concepts of Docker in the previous module, we&amp;rsquo;ll now explore experimenting in isolated container environments.&#xA;Building reproducible environments is crucial in GPU-accelerated communication simulation research. In this module, you&amp;rsquo;ll learn how to standardize research workflows by isolating &lt;a href=&#34;https://developer.nvidia.com/sionna&#34;&gt;NVIDIA Sionna&lt;/a&gt; in containers.&lt;/p&gt;&#xA;&lt;h2 id=&#34;-learning-objectives&#34;&gt;🎯 Learning Objectives&lt;/h2&gt;&#xA;&lt;p&gt;Upon completing this module, you will be able to:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Understand NVIDIA Sionna&amp;rsquo;s core features and Docker integration&lt;/li&gt;&#xA;&lt;li&gt;Configure GPU-enabled TensorFlow container environments&lt;/li&gt;&#xA;&lt;li&gt;Build JupyterLab-based Sionna experiment environments&lt;/li&gt;&#xA;&lt;li&gt;Manage environment versions with baseline/extras tagging strategies&lt;/li&gt;&#xA;&lt;li&gt;Share and deploy images through Amazon ECR&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;-module-structure&#34;&gt;📚 Module Structure&lt;/h2&gt;&#xA;&lt;p&gt;This Sionna container environment module is organized as follows:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Version Management Using Git</title>
+      <link>//localhost:1313/en/50-git-management/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/en/50-git-management/</guid>
+      <description>&lt;h1 id=&#34;version-management-using-git&#34;&gt;Version Management Using Git&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;AI-DLC Based Experiment Code Management&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;Having built container-based experiment environments, systematic version management is now essential. In this module, you&amp;rsquo;ll learn how to build an experiment version management system using Git based on AI-DLC (Development Life Cycle) concepts.&lt;/p&gt;&#xA;&lt;h2 id=&#34;-learning-objectives&#34;&gt;🎯 Learning Objectives&lt;/h2&gt;&#xA;&lt;p&gt;After completing this module, you will be able to:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Understand AI-DLC (Development Life Cycle) concepts and experiment reproducibility importance&lt;/li&gt;&#xA;&lt;li&gt;Initialize Git repositories and utilize basic commands&lt;/li&gt;&#xA;&lt;li&gt;Implement efficient version management through .gitignore files&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;-ai-dlc-concepts-and-experiment-reproducibility&#34;&gt;🔄 AI-DLC Concepts and Experiment Reproducibility&lt;/h2&gt;&#xA;&lt;h3 id=&#34;what-is-ai-dlc-development-life-cycle&#34;&gt;What is AI-DLC (Development Life Cycle)?&lt;/h3&gt;&#xA;&lt;p&gt;AI-DLC is a methodology for managing the entire lifecycle of data, code, and experiment results in AI/ML research:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Integrated Workflow Practice</title>
+      <link>//localhost:1313/en/60-integrated-workflow/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/en/60-integrated-workflow/</guid>
+      <description>&lt;h1 id=&#34;integrated-workflow-practice&#34;&gt;Integrated Workflow Practice&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;Reproducible Research Environment Using Docker + Git + ECR&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;Having learned Docker containers, Git version control, and ECR image sharing in previous modules, now it&amp;rsquo;s time to integrate all these components into a complete workflow used in actual research environments. Experience the entire process from experiment change tracking to team collaboration through Sionna PHY Abstraction experiments.&lt;/p&gt;&#xA;&lt;h2 id=&#34;-learning-objectives&#34;&gt;🎯 Learning Objectives&lt;/h2&gt;&#xA;&lt;p&gt;Upon completing this module, you will be able to:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>[Advanced] Sionna Deployment and Scaling on Amazon EKS Auto Mode</title>
+      <link>//localhost:1313/en/70-eks/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/en/70-eks/</guid>
+      <description>&lt;h1 id=&#34;sionna-deployment-and-scaling-on-amazon-eks-auto-mode&#34;&gt;Sionna Deployment and Scaling on Amazon EKS Auto Mode&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;Operating Containerized Research Environments on Existing Clusters&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;Learn how to deploy Sionna container images built in previous modules to Amazon EKS Auto Mode clusters and dynamically scale them according to experiment requirements.&lt;/p&gt;&#xA;&lt;h2 id=&#34;-learning-objectives&#34;&gt;🎯 Learning Objectives&lt;/h2&gt;&#xA;&lt;p&gt;After completing this section, you will be able to:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Configure kubeconfig for EKS Auto Mode clusters&lt;/li&gt;&#xA;&lt;li&gt;Deploy Sionna images from ECR as Deployments&lt;/li&gt;&#xA;&lt;li&gt;Manage pods and services using kubectl&lt;/li&gt;&#xA;&lt;li&gt;Perform manual scaling by adjusting Deployment replica counts&lt;/li&gt;&#xA;&lt;li&gt;Monitor resources according to experimental workloads&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;-features-of-eks-auto-mode&#34;&gt;🚀 Features of EKS Auto Mode&lt;/h2&gt;&#xA;&lt;h3 id=&#34;traditional-eks-vs-eks-auto-mode&#34;&gt;Traditional EKS vs EKS Auto Mode&lt;/h3&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-mermaid&#34; data-lang=&#34;mermaid&#34;&gt;graph TB&#xA;    subgraph &amp;#34;Traditional EKS&amp;#34;&#xA;        A[Manual Node Group Management]&#xA;        B[Instance Type Selection]&#xA;        C[Scaling Policy Configuration]&#xA;        D[Manual Add-on Installation]&#xA;    end&#xA;    &#xA;    subgraph &amp;#34;EKS Auto Mode&amp;#34;&#xA;        E[Automatic Node Management]&#xA;        F[Workload-based Instance Selection]&#xA;        G[Automatic Scaling]&#xA;        H[Managed Add-ons]&#xA;    end&#xA;    &#xA;    A --&amp;gt; E&#xA;    B --&amp;gt; F&#xA;    C --&amp;gt; G&#xA;    D --&amp;gt; H&#xA;    &#xA;    style E fill:#4CAF50&#xA;    style F fill:#4CAF50&#xA;    style G fill:#4CAF50&#xA;    style H fill:#4CAF50&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;key-benefits-of-auto-mode&#34;&gt;Key Benefits of Auto Mode&lt;/h3&gt;&#xA;&lt;p&gt;&lt;strong&gt;Fully Managed Computing&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Summary</title>
+      <link>//localhost:1313/en/80-summary/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/en/80-summary/</guid>
+      <description>&lt;h1 id=&#34;workshop-summary&#34;&gt;Workshop Summary&lt;/h1&gt;&#xA;&lt;p&gt;Congratulations! You have completed the AWS Containers Workshop for Communication Research and Simulation Environment Management. You have successfully built a reproducible research environment based on NVIDIA Sionna.&lt;/p&gt;&#xA;&lt;h2 id=&#34;-what-you-learned&#34;&gt;🎯 What You Learned&lt;/h2&gt;&#xA;&lt;p&gt;You completed the following 5 core areas in this workshop:&lt;/p&gt;&#xA;&lt;h3 id=&#34;module-1-docker-basics&#34;&gt;&lt;strong&gt;Module 1: Docker Basics&lt;/strong&gt;&lt;/h3&gt;&#xA;&lt;p&gt;&lt;strong&gt;Understanding Core Container Technology Concepts&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;✅ Understanding AWS cloud resources and AI/ML workload evolution&lt;/li&gt;&#xA;&lt;li&gt;✅ Container vs VM comparison and Docker architecture exploration&lt;/li&gt;&#xA;&lt;li&gt;✅ Basic container execution practice&lt;/li&gt;&#xA;&lt;li&gt;✅ Python base image utilization and Sionna environment configuration&lt;/li&gt;&#xA;&lt;li&gt;✅ Practical exercises with matplotlib installation Dockerfile examples&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;module-2-container-based-experiment-isolation-environment&#34;&gt;&lt;strong&gt;Module 2: Container-based Experiment Isolation Environment&lt;/strong&gt;&lt;/h3&gt;&#xA;&lt;p&gt;&lt;strong&gt;Building Reproducible Research Environments&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Credits</title>
+      <link>//localhost:1313/en/90-credits/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/en/90-credits/</guid>
+      <description>&lt;h1 id=&#34;workshop-credits&#34;&gt;Workshop Credits&lt;/h1&gt;&#xA;&lt;p&gt;This workshop is adapted from the &lt;a href=&#34;https://s12d.com/containers-telco-simulation&#34;&gt;Containers Telco Simulation Workshop&lt;/a&gt; for Git and GitHub practice.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,25 @@
+{{ define "main" }}
+<article>
+    <header>
+        <h1>{{ .Title }}</h1>
+        {{ if .Params.date }}
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+        {{ end }}
+    </header>
+    
+    <div class="content">
+        {{ .Content }}
+    </div>
+    
+    {{ if or .NextInSection .PrevInSection }}
+    <nav class="pagination">
+        {{ if .PrevInSection }}
+        <a href="{{ .PrevInSection.Permalink }}" class="prev">← {{ .PrevInSection.Title }}</a>
+        {{ end }}
+        {{ if .NextInSection }}
+        <a href="{{ .NextInSection.Permalink }}" class="next">{{ .NextInSection.Title }} →</a>
+        {{ end }}
+    </nav>
+    {{ end }}
+</article>
+{{ end }}

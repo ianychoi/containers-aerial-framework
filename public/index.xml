@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>컨테이너를 활용한 Aerial Framework 및 Sionna 통신 연구 워크샵</title>
+    <link>//localhost:1313/</link>
+    <description>Recent content on 컨테이너를 활용한 Aerial Framework 및 Sionna 통신 연구 워크샵</description>
+    <generator>Hugo</generator>
+    <language>ko-kr</language>
+    <atom:link href="//localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>소개</title>
+      <link>//localhost:1313/20-introduction/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/20-introduction/</guid>
+      <description>&lt;p&gt;AWS 컨테이너를 활용한 통신 연구 및 시뮬레이션 환경 관리 워크샵에 오신 것을 환영합니다!&lt;/p&gt;&#xA;&lt;p&gt;이 워크샵에서는 NVIDIA Sionna를 활용한 Docker 컨테이너 및 Git 버전 관리 기반의 재현 가능한 통신 시뮬레이션 연구 환경을 구축하는 방법을 학습합니다.&lt;/p&gt;&#xA;&lt;h2 id=&#34;-학습-목표&#34;&gt;🎯 학습 목표&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Docker 컨테이너 기술을 활용한 재현 가능한 실험 환경 이해&lt;/li&gt;&#xA;&lt;li&gt;NVIDIA Sionna 기반 통신 시뮬레이션 환경 컨테이너화&lt;/li&gt;&#xA;&lt;li&gt;AI-DLC(Development Life Cycle) 개념을 바탕으로 한 Git 버전 관리 시스템 활용&lt;/li&gt;&#xA;&lt;li&gt;통합 실험 환경 및 협업 워크플로우 구현&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;-시작하기&#34;&gt;🚀 시작하기&lt;/h2&gt;&#xA;&lt;p&gt;워크샵을 시작하려면 &lt;a href=&#34;//localhost:1313/20-introduction/getting-started/&#34;&gt;시작하기&lt;/a&gt; 섹션으로 이동하여 상세한 워크샵 구성과 환경 준비 방법을 확인하세요.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Docker 기초</title>
+      <link>//localhost:1313/30-docker-basics/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/30-docker-basics/</guid>
+      <description>&lt;h1 id=&#34;docker-기초&#34;&gt;Docker 기초&lt;/h1&gt;&#xA;&lt;p&gt;클라우드 리소스를 효율적으로 활용하는 것은 통신 시뮬레이션 연구를 포함, IT 인프라를 활용하는 여러 환경에 있어 핵심이 되었습니다. 이 모듈에서는 Docker 컨테이너 기술을 활용하는 방법을 배워봅니다.&lt;/p&gt;&#xA;&lt;h2 id=&#34;-학습-목표&#34;&gt;🎯 학습 목표&lt;/h2&gt;&#xA;&lt;p&gt;이 모듈을 완료하면 다음을 할 수 있습니다:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;컨테이너와 가상머신의 차이점 및 Docker 아키텍처 이해&lt;/li&gt;&#xA;&lt;li&gt;Docker 기본 명령어를 사용한 컨테이너 실행 및 관리&lt;/li&gt;&#xA;&lt;li&gt;Dockerfile을 작성하여 커스텀 이미지 빌드&lt;/li&gt;&#xA;&lt;li&gt;Volume을 활용한 데이터 영속성 관리&lt;/li&gt;&#xA;&lt;li&gt;Multi-stage 빌드를 통한 이미지 최적화&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;-모듈-구성&#34;&gt;📚 모듈 구성&lt;/h2&gt;&#xA;&lt;p&gt;이 Docker 기초 모듈은 다음과 같이 구성되어 있습니다:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>컨테이너 기반 실험 격리 환경</title>
+      <link>//localhost:1313/40-container-environment/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/40-container-environment/</guid>
+      <description>&lt;h1 id=&#34;컨테이너-기반-실험-격리-환경&#34;&gt;컨테이너 기반 실험 격리 환경&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;재현 가능한 연구 환경 구축&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;이전 모듈에서 Docker의 기본 개념을 학습했다면, 이제 격리된 컨테이너 환경을 사용하여 실험하는 환경에 대해 살펴보겠습니다.&#xA;GPU 가속 통신 시뮬레이션 연구에서 재현 가능한 환경 구축은 핵심입니다. 이 모듈에서는 &lt;a href=&#34;https://developer.nvidia.com/sionna&#34;&gt;NVIDIA Sionna&lt;/a&gt;를 컨테이너로 격리하여 연구 워크플로우를 표준화하는 방법을 배워봅니다.&lt;/p&gt;&#xA;&lt;h2 id=&#34;-학습-목표&#34;&gt;🎯 학습 목표&lt;/h2&gt;&#xA;&lt;p&gt;이 모듈을 완료하면 다음을 할 수 있습니다:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;NVIDIA Sionna의 핵심 기능과 Docker 통합 이해&lt;/li&gt;&#xA;&lt;li&gt;baseline/extras 태깅 전략으로 환경 버전 관리&lt;/li&gt;&#xA;&lt;li&gt;Amazon ECR을 통한 이미지 공유 및 배포&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;-모듈-구성&#34;&gt;📚 모듈 구성&lt;/h2&gt;&#xA;&lt;p&gt;이 Sionna 컨테이너 환경 모듈은 다음과 같이 구성되어 있습니다:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Git 사용을 통한 버전 관리</title>
+      <link>//localhost:1313/50-git-management/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/50-git-management/</guid>
+      <description>&lt;h1 id=&#34;git-사용을-통한-버전-관리&#34;&gt;Git 사용을 통한 버전 관리&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;AI-DLC 기반 실험 코드 관리&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;컨테이너 기반 실험 환경을 구축했다면, 이제 체계적인 버전 관리가 필요합니다. 이 모듈에서는 Git을 활용하여 AI-DLC(Development Life Cycle) 개념을 바탕으로 한 실험 버전 관리 시스템을 구축하는 방법을 학습합니다.&lt;/p&gt;&#xA;&lt;h2 id=&#34;-학습-목표&#34;&gt;🎯 학습 목표&lt;/h2&gt;&#xA;&lt;p&gt;이 모듈을 완료하면 다음을 할 수 있습니다:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;AI-DLC(Development Life Cycle) 개념과 실험 재현성 중요성 이해&lt;/li&gt;&#xA;&lt;li&gt;Git 저장소 초기화 및 기본 명령어 활용&lt;/li&gt;&#xA;&lt;li&gt;.gitignore 파일을 통한 효율적인 버전 관리&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;-ai-dlc-개념과-실험-재현성&#34;&gt;🔄 AI-DLC 개념과 실험 재현성&lt;/h2&gt;&#xA;&lt;h3 id=&#34;ai-dlcdevelopment-life-cycle란&#34;&gt;AI-DLC(Development Life Cycle)란?&lt;/h3&gt;&#xA;&lt;p&gt;AI-DLC는 AI/ML 연구에서 데이터, 코드, 실험 결과의 전체 생명주기를 관리하는 방법론입니다:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>통합 워크플로우 실습</title>
+      <link>//localhost:1313/60-integrated-workflow/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/60-integrated-workflow/</guid>
+      <description>&lt;h1 id=&#34;통합-워크플로우-실습&#34;&gt;통합 워크플로우 실습&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;Docker + Git + ECR을 활용한 재현 가능한 연구 환경&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;이전 모듈들에서 Docker 컨테이너, Git 버전 관리, ECR 이미지 공유를 각각 학습했다면, 이제 이 모든 것을 통합하여 실제 연구 환경에서 사용하는 완전한 워크플로우를 실습해봅니다. Sionna PHY Abstraction 실험을 통해 실험 변경사항 추적부터 팀 협업까지 전체 과정을 경험합니다.&lt;/p&gt;&#xA;&lt;h2 id=&#34;-학습-목표&#34;&gt;🎯 학습 목표&lt;/h2&gt;&#xA;&lt;p&gt;이 모듈을 완료하면 다음을 할 수 있습니다:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Docker + Git + ECR을 통합한 재현 가능한 실험 환경 구축&lt;/li&gt;&#xA;&lt;li&gt;실험 파라미터 변경사항을 Git으로 체계적으로 추적 및 관리&lt;/li&gt;&#xA;&lt;li&gt;ECR을 통한 실험 환경 공유 및 팀 협업 워크플로우 구현&lt;/li&gt;&#xA;&lt;li&gt;실험 결과의 재현성 검증 및 버전별 비교 분석&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;-모듈-구성&#34;&gt;📚 모듈 구성&lt;/h2&gt;&#xA;&lt;p&gt;이 통합 워크플로우 모듈은 다음과 같이 구성되어 있습니다:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>[고급] Amazon EKS Auto Mode에서 Sionna 배포 및 스케일링</title>
+      <link>//localhost:1313/70-eks/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/70-eks/</guid>
+      <description>&lt;h1 id=&#34;amazon-eks-auto-mode에서-sionna-배포-및-스케일링&#34;&gt;Amazon EKS Auto Mode에서 Sionna 배포 및 스케일링&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;기존 클러스터에서 컨테이너화된 연구 환경 운영&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;이전 모듈에서 구축한 Sionna 컨테이너 이미지를 Amazon EKS Auto Mode 클러스터에 배포하고, 실험 규모에 따라 동적으로 스케일링하는 방법을 학습합니다.&lt;/p&gt;&#xA;&lt;h2 id=&#34;-학습-목표&#34;&gt;🎯 학습 목표&lt;/h2&gt;&#xA;&lt;p&gt;이 섹션을 완료하면 다음을 할 수 있습니다:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;EKS Auto Mode 클러스터에 kubeconfig 설정&lt;/li&gt;&#xA;&lt;li&gt;ECR에서 Sionna 이미지를 가져와 Deployment로 배포&lt;/li&gt;&#xA;&lt;li&gt;kubectl을 사용한 파드 및 서비스 관리&lt;/li&gt;&#xA;&lt;li&gt;Deployment 레플리카 수 조정을 통한 수동 스케일링&lt;/li&gt;&#xA;&lt;li&gt;실험 워크로드에 따른 리소스 모니터링&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;-eks-auto-mode의-특징&#34;&gt;🚀 EKS Auto Mode의 특징&lt;/h2&gt;&#xA;&lt;h3 id=&#34;기존-eks-vs-eks-auto-mode&#34;&gt;기존 EKS vs EKS Auto Mode&lt;/h3&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-mermaid&#34; data-lang=&#34;mermaid&#34;&gt;graph TB&#xA;    subgraph &amp;#34;기존 EKS&amp;#34;&#xA;        A[수동 노드 그룹 관리]&#xA;        B[인스턴스 타입 선택]&#xA;        C[스케일링 정책 설정]&#xA;        D[애드온 수동 설치]&#xA;    end&#xA;    &#xA;    subgraph &amp;#34;EKS Auto Mode&amp;#34;&#xA;        E[자동 노드 관리]&#xA;        F[워크로드 기반 인스턴스 선택]&#xA;        G[자동 스케일링]&#xA;        H[관리형 애드온]&#xA;    end&#xA;    &#xA;    A --&amp;gt; E&#xA;    B --&amp;gt; F&#xA;    C --&amp;gt; G&#xA;    D --&amp;gt; H&#xA;    &#xA;    style E fill:#4CAF50&#xA;    style F fill:#4CAF50&#xA;    style G fill:#4CAF50&#xA;    style H fill:#4CAF50&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;auto-mode의-주요-이점&#34;&gt;Auto Mode의 주요 이점&lt;/h3&gt;&#xA;&lt;p&gt;&lt;strong&gt;완전 관리형 컴퓨팅&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>요약</title>
+      <link>//localhost:1313/80-summary/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/80-summary/</guid>
+      <description>&lt;h1 id=&#34;워크샵-요약&#34;&gt;워크샵 요약&lt;/h1&gt;&#xA;&lt;p&gt;축하합니다! AWS 컨테이너를 활용한 통신 연구 및 시뮬레이션 환경 관리 워크샵을 완료하셨습니다. NVIDIA Sionna 기반의 재현 가능한 연구 환경을 성공적으로 구축했습니다.&lt;/p&gt;&#xA;&lt;h2 id=&#34;-학습한-내용&#34;&gt;🎯 학습한 내용&lt;/h2&gt;&#xA;&lt;p&gt;이 워크샵에서 다음 5가지 핵심 영역을 완료했습니다:&lt;/p&gt;&#xA;&lt;h3 id=&#34;모듈-1-docker-기초&#34;&gt;&lt;strong&gt;모듈 1: Docker 기초&lt;/strong&gt;&lt;/h3&gt;&#xA;&lt;p&gt;&lt;strong&gt;컨테이너 기술의 핵심 개념 이해&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;✅ AWS 클라우드 리소스와 AI/ML 워크로드 발전 이해&lt;/li&gt;&#xA;&lt;li&gt;✅ 컨테이너 vs VM 비교 및 Docker 아키텍처 탐구&lt;/li&gt;&#xA;&lt;li&gt;✅ 컨테이너 기본 실행 실습&lt;/li&gt;&#xA;&lt;li&gt;✅ Python 베이스 이미지 활용 및 Sionna 환경 구성&lt;/li&gt;&#xA;&lt;li&gt;✅ matplotlib 설치 Dockerfile 예제를 통한 실습&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;모듈-2-컨테이너-기반-실험-격리-환경&#34;&gt;&lt;strong&gt;모듈 2: 컨테이너 기반 실험 격리 환경&lt;/strong&gt;&lt;/h3&gt;&#xA;&lt;p&gt;&lt;strong&gt;재현 가능한 연구 환경 구축&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>크레딧</title>
+      <link>//localhost:1313/90-credits/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/90-credits/</guid>
+      <description>&lt;h1 id=&#34;워크샵-크레딧&#34;&gt;워크샵 크레딧&lt;/h1&gt;&#xA;&lt;p&gt;이 워크샵은 &lt;a href=&#34;https://s12d.com/containers-telco-simulation&#34;&gt;Containers Telco Simulation Workshop&lt;/a&gt;을 기반으로 Git 및 GitHub 실습을 위해 제작되었습니다.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,9 @@
+experiment_id: "phy-abs-baseline"
+num_ut: 5              # Number of users
+num_sym: 7             # Number of OFDM symbols
+num_sc: 12             # Number of subcarriers
+bler_target: 0.1       # Target BLER
+mcs_table_index: 1     # MCS table index
+mcs_category: 0        # 0: uplink, 1: downlink
+sinr_range: [-5, 30]   # SINR range (dB)
+num_experiments: 10    # Number of experiment iterations

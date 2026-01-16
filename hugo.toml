@@ -1,0 +1,58 @@
+title = 'Containers Aerial Framework Workshop'
+theme = ''
+defaultContentLanguage = 'ko'
+defaultContentLanguageInSubdir = false
+enableRobotsTXT = true
+enableGitInfo = false
+enableEmoji = true
+pygmentsUseClasses = true
+pygmentsCodeFences = true
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = 'monokai'
+    lineNos = true
+    lineNumbersInTable = true
+    tabWidth = 4
+
+[params]
+  titleSeparator = " | "
+  description = "Learn to build reproducible telecommunications simulation research environments using Docker containers and Git version management"
+  author = "AWS"
+  
+  # Image paths
+  logo = "/aws-logo.png"
+  
+  # Workshop settings
+  workshopDuration = "4 hours"
+  
+[languages]
+  [languages.en]
+    title = 'Containers Aerial Framework Workshop'
+    languageName = 'English'
+    languageCode = 'en-us'
+    weight = 1
+    contentDir = 'content'
+    [languages.en.params]
+      description = "Learn to build reproducible telecommunications simulation research environments using Docker containers and Git version management with NVIDIA Sionna and Aerial Framework"
+
+  [languages.ko]
+    title = '컨테이너를 활용한 Aerial Framework 및 Sionna 통신 연구 워크샵'
+    languageName = '한국어'
+    languageCode = 'ko-kr'
+    weight = 2
+    contentDir = 'content'
+    [languages.ko.params]
+      description = "NVIDIA Sionna와 Aerial Framework를 활용한 Docker 컨테이너 및 Git 버전 관리 기반의 재현 가능한 통신 시뮬레이션 연구 환경 구축"
+
+[outputs]
+  home = ['HTML', 'RSS']
+  section = ['HTML', 'RSS']
+
+[sitemap]
+  changefreq = 'monthly'
+  filename = 'sitemap.xml'
+  priority = 0.5

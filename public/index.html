@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta name="generator" content="Hugo 0.154.5"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>컨테이너를 활용한 Aerial Framework 및 Sionna 통신 연구 워크샵  |  컨테이너를 활용한 Aerial Framework 및 Sionna 통신 연구 워크샵</title>
+    <meta name="description" content="NVIDIA Sionna와 Aerial Framework를 활용한 Docker 컨테이너 및 Git 버전 관리 기반의 재현 가능한 통신 시뮬레이션 연구 환경 구축">
+    
+    <link rel="icon" href="/aws-logo.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+</head>
+<body>
+    
+    <header>
+        <nav>
+            
+            <ul>
+                
+                <li><a href="/en/">English</a></li>
+                
+                <li><a href="/ko/">한국어</a></li>
+                
+            </ul>
+            
+        </nav>
+    </header>
+    
+    
+    <main>
+        
+<div class="home">
+    <header class="hero">
+        
+        <img src="/aws-logo.png" alt="컨테이너를 활용한 Aerial Framework 및 Sionna 통신 연구 워크샵" class="logo">
+        
+        <h1>컨테이너를 활용한 Aerial Framework 및 Sionna 통신 연구 워크샵</h1>
+        
+        <p class="description">NVIDIA Sionna와 Aerial Framework를 활용한 Docker 컨테이너 및 Git 버전 관리 기반의 재현 가능한 통신 시뮬레이션 연구 환경 구축</p>
+        
+    </header>
+    
+    <div class="content">
+        <blockquote>
+<p><strong>안내:</strong> 본 사이트는 Git 및 GitHub 실습을 위해 <a href="https://s12d.com/containers-telco-simulation">Containers Telco Simulation 워크숍</a> 내용을 가져온 것입니다. 최신 내용은 위 워크숍 링크를 참고해주세요.</p>
+</blockquote>
+<h1 id="컨테이너를-활용한-aerial-framework-및-sionna-통신-연구-워크샵">컨테이너를 활용한 Aerial Framework 및 Sionna 통신 연구 워크샵</h1>
+<p>이 워크샵에서는 NVIDIA Sionna와 Aerial Framework를 활용한 Docker 컨테이너 및 Git 버전 관리 기반의 재현 가능한 통신 시뮬레이션 연구 환경을 구축하는 방법을 학습합니다.</p>
+<h2 id="워크샵-개요">워크샵 개요</h2>
+<h3 id="대상">대상</h3>
+<p>이 워크샵은 <strong>통신 연구자</strong>를 대상으로 합니다. 특히 다음과 같은 연구자들에게 적합합니다:</p>
+<ul>
+<li>무선 통신 시스템 연구자</li>
+<li>5G/6G 통신 기술 개발자</li>
+<li>통신 신호 처리 및 AI/ML 연구자</li>
+<li>통신 시뮬레이션 환경 구축이 필요한 연구팀</li>
+</ul>
+<h3 id="배경">배경</h3>
+<p>현대 통신 시스템 연구는 복잡한 AI/ML 워크로드와 대규모 시뮬레이션을 필요로 합니다. 이 워크샵에서는 Docker 컨테이너 기술과 Git 버전 관리를 통해 NVIDIA Sionna와 Aerial Framework 기반의 재현 가능하고 협업 가능한 연구 환경을 구축하는 실습 중심의 학습을 제공합니다.</p>
+<h2 id="학습-목표">학습 목표</h2>
+<ul>
+<li>Docker 컨테이너 기술을 활용한 재현 가능한 실험 환경 구축</li>
+<li>NVIDIA Sionna 및 Aerial Framework 기반 통신 시뮬레이션 환경 컨테이너화</li>
+<li>AI-DLC(Development Life Cycle) 개념을 바탕으로 한 Git 버전 관리 시스템 구축</li>
+<li>Docker Compose를 활용한 통합 개발 환경 및 협업 워크플로우 구현</li>
+<li>실험 변경사항 추적 및 재현성을 보장하는 연구 환경 표준화</li>
+</ul>
+<h2 id="사전-요구사항">사전 요구사항</h2>
+<ul>
+<li>Docker 컨테이너 기본 개념 및 경험 (선호사항)</li>
+<li>Git 버전 관리 기본 지식 (선호사항)</li>
+<li>네트워킹 개념 이해 (권장사항)</li>
+<li>NVIDIA 프레임워크 기본 지식 (권장사항)</li>
+<li>Kubernetes 기초 (선택사항)</li>
+</ul>
+<h2 id="예상-소요-시간">예상 소요 시간</h2>
+<p>약 4시간</p>
+<h2 id="워크샵-구성">워크샵 구성</h2>
+<ol>
+<li><strong>사전 준비</strong> - 환경 설정 및 구성</li>
+<li><strong>소개</strong> - 통신 연구 과제 및 컨테이너 솔루션 개요</li>
+<li><strong>Docker 기초</strong> - Docker 컨테이너 기술 및 Sionna 환경 구축</li>
+<li><strong>컨테이너 기반 실험 격리 환경</strong> - TensorFlow 통합 연구 환경 구성 with Aerial Framework</li>
+<li><strong>Git 버전 관리</strong> - AI-DLC 기반 실험 코드 및 데이터 관리</li>
+<li><strong>통합 실험 환경 및 협업 워크플로우</strong> - 실험 변경사항 추적 및 재현성 구현</li>
+<li><strong>요약</strong> - 실습 산출물 정리 및 확장 학습 방향</li>
+</ol>
+
+    </div>
+    
+    
+    <section class="workshop-sections">
+        <h2>Workshop Sections</h2>
+        <ul>
+        
+            <li>
+                <a href="//localhost:1313/20-introduction/">
+                    <strong>소개</strong>
+                </a>
+                
+            </li>
+        
+            <li>
+                <a href="//localhost:1313/30-docker-basics/">
+                    <strong>Docker 기초</strong>
+                </a>
+                
+            </li>
+        
+            <li>
+                <a href="//localhost:1313/40-container-environment/">
+                    <strong>컨테이너 기반 실험 격리 환경</strong>
+                </a>
+                
+            </li>
+        
+            <li>
+                <a href="//localhost:1313/50-git-management/">
+                    <strong>Git 사용을 통한 버전 관리</strong>
+                </a>
+                
+            </li>
+        
+            <li>
+                <a href="//localhost:1313/60-integrated-workflow/">
+                    <strong>통합 워크플로우 실습</strong>
+                </a>
+                
+            </li>
+        
+            <li>
+                <a href="//localhost:1313/70-eks/">
+                    <strong>[고급] Amazon EKS Auto Mode에서 Sionna 배포 및 스케일링</strong>
+                </a>
+                
+            </li>
+        
+            <li>
+                <a href="//localhost:1313/80-summary/">
+                    <strong>요약</strong>
+                </a>
+                
+            </li>
+        
+            <li>
+                <a href="//localhost:1313/90-credits/">
+                    <strong>크레딧</strong>
+                </a>
+                
+            </li>
+        
+        </ul>
+    </section>
+    
+</div>
+
+    </main>
+    
+    
+    <footer>
+        <p>&copy; 2026 컨테이너를 활용한 Aerial Framework 및 Sionna 통신 연구 워크샵</p>
+    </footer>
+    
+</body>
+</html>

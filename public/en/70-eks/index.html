@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[Advanced] Sionna Deployment and Scaling on Amazon EKS Auto Mode  |  Containers Aerial Framework Workshop</title>
+    <meta name="description" content="Learn to build reproducible telecommunications simulation research environments using Docker containers and Git version management with NVIDIA Sionna and Aerial Framework">
+    
+    <link rel="icon" href="/aws-logo.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+</head>
+<body>
+    
+    <header>
+        <nav>
+            
+            <ul>
+                
+                <li><a href="/en/">English</a></li>
+                
+                <li><a href="/ko/">한국어</a></li>
+                
+            </ul>
+            
+        </nav>
+    </header>
+    
+    
+    <main>
+        
+<article>
+    <header>
+        <h1>[Advanced] Sionna Deployment and Scaling on Amazon EKS Auto Mode</h1>
+        
+    </header>
+    
+    <div class="content">
+        <h1 id="sionna-deployment-and-scaling-on-amazon-eks-auto-mode">Sionna Deployment and Scaling on Amazon EKS Auto Mode</h1>
+<p><strong>Operating Containerized Research Environments on Existing Clusters</strong></p>
+<p>Learn how to deploy Sionna container images built in previous modules to Amazon EKS Auto Mode clusters and dynamically scale them according to experiment requirements.</p>
+<h2 id="-learning-objectives">🎯 Learning Objectives</h2>
+<p>After completing this section, you will be able to:</p>
+<ul>
+<li>Configure kubeconfig for EKS Auto Mode clusters</li>
+<li>Deploy Sionna images from ECR as Deployments</li>
+<li>Manage pods and services using kubectl</li>
+<li>Perform manual scaling by adjusting Deployment replica counts</li>
+<li>Monitor resources according to experimental workloads</li>
+</ul>
+<h2 id="-features-of-eks-auto-mode">🚀 Features of EKS Auto Mode</h2>
+<h3 id="traditional-eks-vs-eks-auto-mode">Traditional EKS vs EKS Auto Mode</h3>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph TB
+    subgraph &#34;Traditional EKS&#34;
+        A[Manual Node Group Management]
+        B[Instance Type Selection]
+        C[Scaling Policy Configuration]
+        D[Manual Add-on Installation]
+    end
+    
+    subgraph &#34;EKS Auto Mode&#34;
+        E[Automatic Node Management]
+        F[Workload-based Instance Selection]
+        G[Automatic Scaling]
+        H[Managed Add-ons]
+    end
+    
+    A --&gt; E
+    B --&gt; F
+    C --&gt; G
+    D --&gt; H
+    
+    style E fill:#4CAF50
+    style F fill:#4CAF50
+    style G fill:#4CAF50
+    style H fill:#4CAF50
+</code></pre><h3 id="key-benefits-of-auto-mode">Key Benefits of Auto Mode</h3>
+<p><strong>Fully Managed Computing</strong></p>
+<ul>
+<li>Automated node provisioning and management</li>
+<li>Automatic selection of instances optimized for workloads</li>
+<li>Automatic recovery in case of failures</li>
+</ul>
+<p><strong>Cost Optimization</strong></p>
+<ul>
+<li>Automatic release of unused resources</li>
+<li>Optimal instance selection based on workload patterns</li>
+<li>Automatic utilization of Spot instances</li>
+</ul>
+<h2 id="-lab-1-eks-cluster-connection-setup">🔧 Lab 1: EKS Cluster Connection Setup</h2>
+<h3 id="11-kubeconfig-configuration">1.1 kubeconfig Configuration</h3>
+<p>First, configure kubeconfig to connect to the existing EKS Auto Mode cluster.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Check EKS cluster list</span>
+</span></span><span class="line"><span class="cl">aws eks list-clusters --region ap-northeast-2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Update kubeconfig (cluster name: eks-automode)</span>
+</span></span><span class="line"><span class="cl">aws eks update-kubeconfig --region ap-northeast-2 --name eks-automode
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Verify connection</span>
+</span></span><span class="line"><span class="cl">kubectl config current-context
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="12-cluster-status-check">1.2 Cluster Status Check</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Check cluster information</span>
+</span></span><span class="line"><span class="cl">kubectl cluster-info
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check node status (nodes are created after workload deployment in Auto Mode)</span>
+</span></span><span class="line"><span class="cl">kubectl get nodes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check namespaces</span>
+</span></span><span class="line"><span class="cl">kubectl get namespaces
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check default system pods</span>
+</span></span><span class="line"><span class="cl">kubectl get pods --all-namespaces
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>💡 Note</strong>: In EKS Auto Mode, nodes may not be created until workloads are deployed. This is normal behavior.</p>
+<h2 id="-lab-2-sionna-image-deployment">🐳 Lab 2: Sionna Image Deployment</h2>
+<h3 id="21-namespace-creation">2.1 Namespace Creation</h3>
+<p>Create a dedicated namespace for the research environment.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Create research namespace</span>
+</span></span><span class="line"><span class="cl">kubectl create namespace research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Verify namespace</span>
+</span></span><span class="line"><span class="cl">kubectl get namespaces
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="22-ecr-image-information-check">2.2 ECR Image Information Check</h3>
+<p>Check the Sionna image pushed to ECR in previous modules.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Check ECR repository list</span>
+</span></span><span class="line"><span class="cl">aws ecr describe-repositories --region ap-northeast-2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check Sionna image tags</span>
+</span></span><span class="line"><span class="cl">aws ecr list-images --repository-name sionna --region ap-northeast-2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check latest image URI (replace account ID with actual value)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;676206906668.dkr.ecr.ap-northeast-2.amazonaws.com/sionna:latest&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="23-create-sionna-deployment">2.3 Create Sionna Deployment</h3>
+<p>Deploy the Sionna research environment as a Kubernetes Deployment.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Create Deployment YAML file</span>
+</span></span><span class="line"><span class="cl">cat &gt; sionna-deployment.yaml <span class="s">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s">apiVersion: apps/v1
+</span></span></span><span class="line"><span class="cl"><span class="s">kind: Deployment
+</span></span></span><span class="line"><span class="cl"><span class="s">metadata:
+</span></span></span><span class="line"><span class="cl"><span class="s">  name: sionna-research
+</span></span></span><span class="line"><span class="cl"><span class="s">  namespace: research
+</span></span></span><span class="line"><span class="cl"><span class="s">  labels:
+</span></span></span><span class="line"><span class="cl"><span class="s">    app: sionna-research
+</span></span></span><span class="line"><span class="cl"><span class="s">spec:
+</span></span></span><span class="line"><span class="cl"><span class="s">  replicas: 2  # Start with 2 pods initially
+</span></span></span><span class="line"><span class="cl"><span class="s">  selector:
+</span></span></span><span class="line"><span class="cl"><span class="s">    matchLabels:
+</span></span></span><span class="line"><span class="cl"><span class="s">      app: sionna-research
+</span></span></span><span class="line"><span class="cl"><span class="s">  template:
+</span></span></span><span class="line"><span class="cl"><span class="s">    metadata:
+</span></span></span><span class="line"><span class="cl"><span class="s">      labels:
+</span></span></span><span class="line"><span class="cl"><span class="s">        app: sionna-research
+</span></span></span><span class="line"><span class="cl"><span class="s">    spec:
+</span></span></span><span class="line"><span class="cl"><span class="s">      containers:
+</span></span></span><span class="line"><span class="cl"><span class="s">      - name: sionna-lab
+</span></span></span><span class="line"><span class="cl"><span class="s">        image: 676206906668.dkr.ecr.ap-northeast-2.amazonaws.com/sionna:latest
+</span></span></span><span class="line"><span class="cl"><span class="s">        ports:
+</span></span></span><span class="line"><span class="cl"><span class="s">        - containerPort: 8888
+</span></span></span><span class="line"><span class="cl"><span class="s">          name: jupyter
+</span></span></span><span class="line"><span class="cl"><span class="s">        resources:
+</span></span></span><span class="line"><span class="cl"><span class="s">          requests:
+</span></span></span><span class="line"><span class="cl"><span class="s">            memory: &#34;2Gi&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">            cpu: &#34;1&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">          limits:
+</span></span></span><span class="line"><span class="cl"><span class="s">            memory: &#34;4Gi&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">            cpu: &#34;2&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">        env:
+</span></span></span><span class="line"><span class="cl"><span class="s">        - name: JUPYTER_ENABLE_LAB
+</span></span></span><span class="line"><span class="cl"><span class="s">          value: &#34;yes&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">        - name: JUPYTER_TOKEN
+</span></span></span><span class="line"><span class="cl"><span class="s">          value: &#34;sionna-workshop&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">        readinessProbe:
+</span></span></span><span class="line"><span class="cl"><span class="s">          httpGet:
+</span></span></span><span class="line"><span class="cl"><span class="s">            path: /lab
+</span></span></span><span class="line"><span class="cl"><span class="s">            port: 8888
+</span></span></span><span class="line"><span class="cl"><span class="s">          initialDelaySeconds: 30
+</span></span></span><span class="line"><span class="cl"><span class="s">          periodSeconds: 10
+</span></span></span><span class="line"><span class="cl"><span class="s">        livenessProbe:
+</span></span></span><span class="line"><span class="cl"><span class="s">          httpGet:
+</span></span></span><span class="line"><span class="cl"><span class="s">            path: /lab
+</span></span></span><span class="line"><span class="cl"><span class="s">            port: 8888
+</span></span></span><span class="line"><span class="cl"><span class="s">          initialDelaySeconds: 60
+</span></span></span><span class="line"><span class="cl"><span class="s">          periodSeconds: 30
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Deploy Deployment</span>
+</span></span><span class="line"><span class="cl">kubectl apply -f sionna-deployment.yaml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="24-check-deployment-status">2.4 Check Deployment Status</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Check Deployment status</span>
+</span></span><span class="line"><span class="cl">kubectl get deployments -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check pod status</span>
+</span></span><span class="line"><span class="cl">kubectl get pods -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check pod details</span>
+</span></span><span class="line"><span class="cl">kubectl describe pods -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check pod logs (replace pod name with actual value)</span>
+</span></span><span class="line"><span class="cl">kubectl logs -n research -l <span class="nv">app</span><span class="o">=</span>sionna-research
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="-lab-3-service-creation-and-access">🌐 Lab 3: Service Creation and Access</h2>
+<h3 id="31-create-loadbalancer-service">3.1 Create LoadBalancer Service</h3>
+<p>Create a LoadBalancer service to enable external access to Sionna Jupyter Lab.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Create Service YAML file</span>
+</span></span><span class="line"><span class="cl">cat &gt; sionna-service.yaml <span class="s">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s">apiVersion: v1
+</span></span></span><span class="line"><span class="cl"><span class="s">kind: Service
+</span></span></span><span class="line"><span class="cl"><span class="s">metadata:
+</span></span></span><span class="line"><span class="cl"><span class="s">  name: sionna-service
+</span></span></span><span class="line"><span class="cl"><span class="s">  namespace: research
+</span></span></span><span class="line"><span class="cl"><span class="s">  labels:
+</span></span></span><span class="line"><span class="cl"><span class="s">    app: sionna-research
+</span></span></span><span class="line"><span class="cl"><span class="s">spec:
+</span></span></span><span class="line"><span class="cl"><span class="s">  type: LoadBalancer
+</span></span></span><span class="line"><span class="cl"><span class="s">  selector:
+</span></span></span><span class="line"><span class="cl"><span class="s">    app: sionna-research
+</span></span></span><span class="line"><span class="cl"><span class="s">  ports:
+</span></span></span><span class="line"><span class="cl"><span class="s">  - name: jupyter
+</span></span></span><span class="line"><span class="cl"><span class="s">    port: 8888
+</span></span></span><span class="line"><span class="cl"><span class="s">    targetPort: 8888
+</span></span></span><span class="line"><span class="cl"><span class="s">    protocol: TCP
+</span></span></span><span class="line"><span class="cl"><span class="s">  annotations:
+</span></span></span><span class="line"><span class="cl"><span class="s">    service.beta.kubernetes.io/aws-load-balancer-type: &#34;nlb&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">    service.beta.kubernetes.io/aws-load-balancer-scheme: &#34;internet-facing&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Deploy service</span>
+</span></span><span class="line"><span class="cl">kubectl apply -f sionna-service.yaml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="32-verify-service-access">3.2 Verify Service Access</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Check service status</span>
+</span></span><span class="line"><span class="cl">kubectl get services -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check LoadBalancer external IP (takes 2-3 minutes to create)</span>
+</span></span><span class="line"><span class="cl">kubectl get service sionna-service -n research -w
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check external access URL</span>
+</span></span><span class="line"><span class="cl"><span class="nv">EXTERNAL_IP</span><span class="o">=</span><span class="k">$(</span>kubectl get service sionna-service -n research -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.loadBalancer.ingress[0].hostname}&#39;</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Jupyter Lab URL: http://</span><span class="nv">$EXTERNAL_IP</span><span class="s2">:8888&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Token: sionna-workshop&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>💡 Access Method</strong>: Access the above URL in your browser and enter <code>sionna-workshop</code> as the token.</p>
+<h2 id="-lab-4-manual-scaling-practice">📊 Lab 4: Manual Scaling Practice</h2>
+<h3 id="41-check-current-pod-count">4.1 Check Current Pod Count</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Check current running pod count</span>
+</span></span><span class="line"><span class="cl">kubectl get pods -n research -l <span class="nv">app</span><span class="o">=</span>sionna-research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check Deployment details</span>
+</span></span><span class="line"><span class="cl">kubectl describe deployment sionna-research -n research
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="42-scale-up-increase-pod-count">4.2 Scale Up (Increase Pod Count)</h3>
+<p>Assume research experiments have increased and scale up the pod count.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Increase pod count to 5</span>
+</span></span><span class="line"><span class="cl">kubectl scale deployment sionna-research --replicas<span class="o">=</span><span class="m">5</span> -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Monitor scaling progress in real-time</span>
+</span></span><span class="line"><span class="cl">kubectl get pods -n research -l <span class="nv">app</span><span class="o">=</span>sionna-research -w
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check the process of new pods being created</span>
+</span></span><span class="line"><span class="cl">kubectl get events -n research --sort-by<span class="o">=</span><span class="s1">&#39;.lastTimestamp&#39;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="43-check-automatic-node-provisioning">4.3 Check Automatic Node Provisioning</h3>
+<p>Check automatic node creation in EKS Auto Mode as workload increases.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Check node status (new nodes are automatically added)</span>
+</span></span><span class="line"><span class="cl">kubectl get nodes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check pod placement by node</span>
+</span></span><span class="line"><span class="cl">kubectl get pods -n research -o wide
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check cluster resource usage</span>
+</span></span><span class="line"><span class="cl">kubectl top nodes
+</span></span><span class="line"><span class="cl">kubectl top pods -n research
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="44-scale-down-decrease-pod-count">4.4 Scale Down (Decrease Pod Count)</h3>
+<p>Assume experiments are completed and reduce the pod count.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Decrease pod count to 1</span>
+</span></span><span class="line"><span class="cl">kubectl scale deployment sionna-research --replicas<span class="o">=</span><span class="m">1</span> -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check pod termination process</span>
+</span></span><span class="line"><span class="cl">kubectl get pods -n research -l <span class="nv">app</span><span class="o">=</span>sionna-research -w
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check resource usage changes</span>
+</span></span><span class="line"><span class="cl">kubectl top pods -n research
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="-lab-5-pod-and-log-monitoring">🔍 Lab 5: Pod and Log Monitoring</h2>
+<h3 id="51-pod-status-monitoring">5.1 Pod Status Monitoring</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Real-time pod status monitoring</span>
+</span></span><span class="line"><span class="cl">watch kubectl get pods -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Pod resource usage monitoring</span>
+</span></span><span class="line"><span class="cl">watch kubectl top pods -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check specific pod details</span>
+</span></span><span class="line"><span class="cl"><span class="nv">POD_NAME</span><span class="o">=</span><span class="k">$(</span>kubectl get pods -n research -l <span class="nv">app</span><span class="o">=</span>sionna-research -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.items[0].metadata.name}&#39;</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl">kubectl describe pod <span class="nv">$POD_NAME</span> -n research
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="52-log-monitoring">5.2 Log Monitoring</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Check logs from all Sionna pods</span>
+</span></span><span class="line"><span class="cl">kubectl logs -n research -l <span class="nv">app</span><span class="o">=</span>sionna-research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Real-time log monitoring for specific pod</span>
+</span></span><span class="line"><span class="cl">kubectl logs -f <span class="nv">$POD_NAME</span> -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check logs from previously restarted pods (if any)</span>
+</span></span><span class="line"><span class="cl">kubectl logs <span class="nv">$POD_NAME</span> -n research --previous
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="53-pod-internal-access">5.3 Pod Internal Access</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Access pod internal shell</span>
+</span></span><span class="line"><span class="cl">kubectl <span class="nb">exec</span> -it <span class="nv">$POD_NAME</span> -n research -- /bin/bash
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check Sionna environment inside pod</span>
+</span></span><span class="line"><span class="cl">kubectl <span class="nb">exec</span> <span class="nv">$POD_NAME</span> -n research -- python -c <span class="s2">&#34;import sionna; print(sionna.__version__)&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check pod internal file system</span>
+</span></span><span class="line"><span class="cl">kubectl <span class="nb">exec</span> <span class="nv">$POD_NAME</span> -n research -- ls -la /workspace
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="-lab-6-experiment-simulation">📈 Lab 6: Experiment Simulation</h2>
+<h3 id="61-multi-experiment-environment-simulation">6.1 Multi-Experiment Environment Simulation</h3>
+<p>Assume multiple researchers are conducting experiments simultaneously and scale pods.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Scale pods for 5 researchers</span>
+</span></span><span class="line"><span class="cl">kubectl scale deployment sionna-research --replicas<span class="o">=</span><span class="m">5</span> -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check access information for each pod</span>
+</span></span><span class="line"><span class="cl">kubectl get pods -n research -l <span class="nv">app</span><span class="o">=</span>sionna-research -o wide
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check traffic distribution through load balancer</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> i in <span class="o">{</span>1..10<span class="o">}</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  curl -s http://<span class="nv">$EXTERNAL_IP</span>:8888/lab <span class="p">|</span> grep -o <span class="s2">&#34;Jupyter&#34;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">&#34;Request </span><span class="nv">$i</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  sleep <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="62-resource-usage-pattern-analysis">6.2 Resource Usage Pattern Analysis</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Check CPU and memory usage by pod</span>
+</span></span><span class="line"><span class="cl">kubectl top pods -n research --sort-by<span class="o">=</span>cpu
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check resource usage by node</span>
+</span></span><span class="line"><span class="cl">kubectl top nodes --sort-by<span class="o">=</span>cpu
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check overall cluster resource status</span>
+</span></span><span class="line"><span class="cl">kubectl describe nodes <span class="p">|</span> grep -A <span class="m">5</span> <span class="s2">&#34;Allocated resources&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="63-cleanup-after-experiments">6.3 Cleanup After Experiments</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Minimize pod count after experiment completion</span>
+</span></span><span class="line"><span class="cl">kubectl scale deployment sionna-research --replicas<span class="o">=</span><span class="m">1</span> -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check unnecessary resource cleanup</span>
+</span></span><span class="line"><span class="cl">kubectl get pods -n research
+</span></span><span class="line"><span class="cl">kubectl get nodes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Observe automatic node scaling down process in Auto Mode</span>
+</span></span><span class="line"><span class="cl">watch kubectl get nodes
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="-advanced-lab-deployment-updates">🛠️ Advanced Lab: Deployment Updates</h2>
+<h3 id="71-rolling-update-simulation">7.1 Rolling Update Simulation</h3>
+<p>Simulate updating to a new Sionna image version.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Check current image version</span>
+</span></span><span class="line"><span class="cl">kubectl describe deployment sionna-research -n research <span class="p">|</span> grep Image
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Update image (change tag to v1.0)</span>
+</span></span><span class="line"><span class="cl">kubectl <span class="nb">set</span> image deployment/sionna-research sionna-lab<span class="o">=</span>676206906668.dkr.ecr.ap-northeast-2.amazonaws.com/sionna:v1.0 -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check rolling update progress</span>
+</span></span><span class="line"><span class="cl">kubectl rollout status deployment/sionna-research -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check update history</span>
+</span></span><span class="line"><span class="cl">kubectl rollout <span class="nb">history</span> deployment/sionna-research -n research
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="72-rollback-practice">7.2 Rollback Practice</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Rollback to previous version</span>
+</span></span><span class="line"><span class="cl">kubectl rollout undo deployment/sionna-research -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check rollback progress</span>
+</span></span><span class="line"><span class="cl">kubectl rollout status deployment/sionna-research -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Rollback to specific revision</span>
+</span></span><span class="line"><span class="cl">kubectl rollout undo deployment/sionna-research --to-revision<span class="o">=</span><span class="m">1</span> -n research
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="-performance-and-cost-analysis">📊 Performance and Cost Analysis</h2>
+<h3 id="eks-auto-mode-vs-traditional-environment-comparison">EKS Auto Mode vs Traditional Environment Comparison</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Item</th>
+          <th>Local Docker</th>
+          <th>EKS Auto Mode</th>
+          <th>Improvement</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Concurrent Experiment Environments</td>
+          <td>1</td>
+          <td>5-10</td>
+          <td>5-10x</td>
+      </tr>
+      <tr>
+          <td>Resource Utilization</td>
+          <td>Fixed</td>
+          <td>Dynamic Adjustment</td>
+          <td>30-50% efficiency</td>
+      </tr>
+      <tr>
+          <td>Management Complexity</td>
+          <td>Manual</td>
+          <td>Automated</td>
+          <td>80% reduction</td>
+      </tr>
+      <tr>
+          <td>Scalability</td>
+          <td>Limited</td>
+          <td>Unlimited</td>
+          <td>Unlimited</td>
+      </tr>
+      <tr>
+          <td>Cost</td>
+          <td>Fixed</td>
+          <td>Usage-based</td>
+          <td>20-40% savings</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="resource-usage-patterns">Resource Usage Patterns</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Resource usage monitoring script by time</span>
+</span></span><span class="line"><span class="cl">cat &gt; monitor-resources.sh <span class="s">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="s">echo &#34;Timestamp,Pods,CPU_Usage,Memory_Usage&#34; &gt; resource-usage.csv
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">for i in {1..60}; do
+</span></span></span><span class="line"><span class="cl"><span class="s">  TIMESTAMP=$(date &#39;+%Y-%m-%d %H:%M:%S&#39;)
+</span></span></span><span class="line"><span class="cl"><span class="s">  PODS=$(kubectl get pods -n research -l app=sionna-research --no-headers | wc -l)
+</span></span></span><span class="line"><span class="cl"><span class="s">  CPU=$(kubectl top pods -n research -l app=sionna-research --no-headers | awk &#39;{sum+=$2} END {print sum}&#39; | sed &#39;s/m//&#39;)
+</span></span></span><span class="line"><span class="cl"><span class="s">  MEMORY=$(kubectl top pods -n research -l app=sionna-research --no-headers | awk &#39;{sum+=$3} END {print sum}&#39; | sed &#39;s/Mi//&#39;)
+</span></span></span><span class="line"><span class="cl"><span class="s">  
+</span></span></span><span class="line"><span class="cl"><span class="s">  echo &#34;$TIMESTAMP,$PODS,$CPU,$MEMORY&#34; &gt;&gt; resource-usage.csv
+</span></span></span><span class="line"><span class="cl"><span class="s">  echo &#34;[$i/60] Pods: $PODS, CPU: ${CPU}m, Memory: ${MEMORY}Mi&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">  
+</span></span></span><span class="line"><span class="cl"><span class="s">  sleep 60
+</span></span></span><span class="line"><span class="cl"><span class="s">done
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">chmod +x monitor-resources.sh
+</span></span><span class="line"><span class="cl"><span class="c1"># ./monitor-resources.sh  # Run in background</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="-lab-cleanup">🧹 Lab Cleanup</h2>
+<h3 id="resource-cleanup">Resource Cleanup</h3>
+<p>Clean up resources created after lab completion.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Delete Deployment</span>
+</span></span><span class="line"><span class="cl">kubectl delete deployment sionna-research -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Delete Service</span>
+</span></span><span class="line"><span class="cl">kubectl delete service sionna-service -n research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Delete namespace (optional)</span>
+</span></span><span class="line"><span class="cl">kubectl delete namespace research
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Clean up created YAML files</span>
+</span></span><span class="line"><span class="cl">rm -f sionna-deployment.yaml sionna-service.yaml monitor-resources.sh
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="-lab-exercises">📝 Lab Exercises</h2>
+<h3 id="exercise-1-basic-deployment-and-access">Exercise 1: Basic Deployment and Access</h3>
+<ol>
+<li>Configure kubeconfig for EKS Auto Mode cluster</li>
+<li>Create Deployment by pulling Sionna image from ECR</li>
+<li>Verify external access through LoadBalancer service</li>
+<li>Run simple Sionna code in Jupyter Lab</li>
+</ol>
+<h3 id="exercise-2-scaling-practice">Exercise 2: Scaling Practice</h3>
+<ol>
+<li>Scale pod count from 1 to 5</li>
+<li>Observe automatic node provisioning process</li>
+<li>Scale pod count back to 1</li>
+<li>Monitor resource usage changes</li>
+</ol>
+<h3 id="exercise-3-advanced-operations">Exercise 3: Advanced Operations</h3>
+<ol>
+<li>Change image version through rolling update</li>
+<li>Perform rollback in case of update failure</li>
+<li>Monitor pod logs and status</li>
+<li>Analyze resource usage patterns</li>
+</ol>
+<h2 id="-key-learning-points">🎯 Key Learning Points</h2>
+<h3 id="advantages-of-eks-auto-mode">Advantages of EKS Auto Mode</h3>
+<ul>
+<li><strong>Fully Managed</strong>: Automated node management</li>
+<li><strong>Cost Efficiency</strong>: Usage-based billing</li>
+<li><strong>Auto Scaling</strong>: Dynamic adjustment based on workload</li>
+<li><strong>Simplified Operations</strong>: Minimal infrastructure management burden</li>
+</ul>
+<h3 id="core-kubectl-commands">Core kubectl Commands</h3>
+<ul>
+<li><code>kubectl get</code>: Resource inquiry</li>
+<li><code>kubectl describe</code>: Detailed information check</li>
+<li><code>kubectl logs</code>: Log check</li>
+<li><code>kubectl scale</code>: Scaling</li>
+<li><code>kubectl exec</code>: Pod internal access</li>
+</ul>
+<h3 id="monitoring-and-management">Monitoring and Management</h3>
+<ul>
+<li>Real-time pod status monitoring</li>
+<li>Resource usage tracking</li>
+<li>Log-based troubleshooting</li>
+<li>Rolling updates and rollbacks</li>
+</ul>
+<h2 id="-next-steps">🚀 Next Steps</h2>
+<p>You have completed Sionna deployment and scaling practice on EKS Auto Mode. Now you can explore the following advanced features:</p>
+<ol>
+<li><strong>Auto Scaling</strong>: Configure HPA (Horizontal Pod Autoscaler)</li>
+<li><strong>CI/CD Pipeline</strong>: Integrate GitHub Actions with EKS</li>
+<li><strong>Enhanced Monitoring</strong>: Build Prometheus + Grafana</li>
+<li><strong>Security Enhancement</strong>: Apply RBAC and network policies</li>
+</ol>
+<hr>
+<p><strong><a href="/en/80-summary/">Continue to Workshop Summary →</a></strong></p>
+
+    </div>
+    
+    
+    <nav class="pagination">
+        
+        <a href="//localhost:1313/en/80-summary/" class="prev">← Summary</a>
+        
+        
+        <a href="//localhost:1313/en/60-integrated-workflow/" class="next">Integrated Workflow Practice →</a>
+        
+    </nav>
+    
+</article>
+
+    </main>
+    
+    
+    <footer>
+        <p>&copy; 2026 Containers Aerial Framework Workshop</p>
+    </footer>
+    
+</body>
+</html>

@@ -1,0 +1,35 @@
+{{ define "main" }}
+<div class="home">
+    <header class="hero">
+        {{ if .Site.Params.logo }}
+        <img src="{{ .Site.Params.logo }}" alt="{{ .Site.Title }}" class="logo">
+        {{ end }}
+        <h1>{{ .Title }}</h1>
+        {{ if .Site.Params.description }}
+        <p class="description">{{ .Site.Params.description }}</p>
+        {{ end }}
+    </header>
+    
+    <div class="content">
+        {{ .Content }}
+    </div>
+    
+    {{ if .Pages }}
+    <section class="workshop-sections">
+        <h2>Workshop Sections</h2>
+        <ul>
+        {{ range .Pages.ByWeight }}
+            <li>
+                <a href="{{ .Permalink }}">
+                    <strong>{{ .Title }}</strong>
+                </a>
+                {{ if .Params.description }}
+                <p>{{ .Params.description }}</p>
+                {{ end }}
+            </li>
+        {{ end }}
+        </ul>
+    </section>
+    {{ end }}
+</div>
+{{ end }}
