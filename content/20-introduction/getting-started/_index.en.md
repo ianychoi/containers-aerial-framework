@@ -54,33 +54,33 @@ graph LR
 
 Through this workshop, you'll see how containers and EKS provide an excellent foundation for telecommunications research platforms:
 
-::::tabs
+{{< tabs "Scalability" "Flexibility" "Operations" >}}
 
-:::tab{label="Scalability"}
+{{< tab "Scalability" }}
 **Dynamic Infrastructure**
 - Auto-scaling based on research workload demand
 - AWS specialized hardware support (high-performance computing, dedicated instances)
 - Distributed simulation capabilities
 - Multi-workload deployment patterns
-:::
+{{< /tab >}}
 
-:::tab{label="Flexibility"}
+{{< tab "Flexibility" }}
 **Choice and Control**
 - Self-hosted simulation tools
 - Managed cloud services integration
 - Hybrid deployment patterns
 - Custom optimization strategies
-:::
+{{< /tab >}}
 
-:::tab{label="Operations"}
+{{< tab "Operations" }}
 **Operational Excellence**
 - Comprehensive observability through CloudWatch
 - Automated lifecycle management with Helm
 - Cost optimization and tracking
 - Security best practices
-:::
+{{< /tab >}}
 
-::::
+{{< /tabs >}}
 
 ## 🏗️ Built on AWS Container Best Practices
 

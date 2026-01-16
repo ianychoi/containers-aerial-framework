@@ -9,6 +9,8 @@ pygmentsCodeFences = true
 relativeURLs = true
 
 [markup]
+  [markup.mermaid]
+    enable = true
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
