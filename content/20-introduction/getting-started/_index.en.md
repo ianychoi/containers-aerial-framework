@@ -54,7 +54,7 @@ graph LR
 
 Through this workshop, you'll see how containers and EKS provide an excellent foundation for telecommunications research platforms:
 
-{{< tabs >}}
+{{< tabs "Scalability" "Flexibility" "Operations" >}}
 
 {{< tab "Scalability" }}
 **Dynamic Infrastructure**
