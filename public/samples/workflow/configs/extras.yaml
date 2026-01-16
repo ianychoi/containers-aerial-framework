@@ -1,9 +1,0 @@
-experiment_id: "phy-abs-extras"
-num_ut: 8              # Increased number of users
-num_sym: 14            # Increased number of OFDM symbols
-num_sc: 24             # Increased number of subcarriers
-bler_target: 0.05      # Stricter target BLER
-mcs_table_index: 2     # Different MCS table
-mcs_category: 1        # downlink
-sinr_range: [-10, 35]  # Wider SINR range
-num_experiments: 20    # More experiment iterations

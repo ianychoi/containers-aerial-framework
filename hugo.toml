@@ -6,6 +6,7 @@ enableGitInfo = false
 enableEmoji = true
 pygmentsUseClasses = true
 pygmentsCodeFences = true
+relativeURLs = true
 
 [markup]
   [markup.goldmark]
